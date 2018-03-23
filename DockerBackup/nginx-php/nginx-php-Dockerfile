@@ -1,0 +1,6 @@
+FROM ubuntu:16.04
+RUN apt-get update; apt-get install -y nginx; apt-get install -y php-fpm; apt-get install -y net-tools; apt-get install -y curl; rm /etc/nginx/sites-enabled/default; rm /etc/php/7.0/fpm/pool.d/www.conf; service nginx reload; service  php7.0-fpm restart;
+ADD info.conf /etc/nginx/sites-enabled/
+ADD info.php /var/www/html/
+ADD www.conf /etc/php/7.0/fpm/pool.d/
+CMD service nginx start && service php7.0-fpm start && bash
