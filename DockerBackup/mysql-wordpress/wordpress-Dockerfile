@@ -2,7 +2,7 @@ FROM nginx-php:1.0
 
 WORKDIR /root
 
-COPY wordpress.conf /etc/nginx/sites-enabled/default
+ADD wordpress.conf /etc/nginx/sites-enabled/default
 
 RUN rm /var/www/html/info.php; rm /etc/nginx/sites-enabled/info.conf; apt-get update; apt-get install -y wget; apt-get install -y unzip; wget http://wordpress.org/latest.zip; unzip latest.zip; apt-get update; cd wordpress; cp wp-config-sample.php wp-config.php; curl -s https://api.wordpress.org/secret-key/1.1/salt/ >> wp-config.php; cp ../wordpress/ -ru /var/www/html/; chown -R www-data:www-data /var/www/html/wordpress; apt-get install -y php7.0-mysql; sed -i 's@listen = /run/php/php7.0-fpm.sock@listen = 9000@' /etc/php/7.0/fpm/pool.d/www.conf; sed -i "s@define('DB_NAME', 'database_name_here');@define('DB_NAME', 'wordpress');@" /var/www/html/wordpress/wp-config.php; sed -i "s@define('DB_USER', 'username_here');@define('DB_USER', 'wordpressuser');@" /var/www/html/wordpress/wp-config.php; sed -i "s@define('DB_PASSWORD', 'password_here');@define('DB_PASSWORD', 'password');@" /var/www/html/wordpress/wp-config.php; sed -i "s@define('DB_HOST', 'localhost');@define('DB_HOST', '172.17.0.2');@" /var/www/html/wordpress/wp-config.php; service nginx restart; service php7.0-fpm restart;
 
